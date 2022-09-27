@@ -57,7 +57,11 @@ class SubcategoryApiController extends Controller
      */
     public function show($id)
     {
-        return abort(404);
+        $subcategory = Subcategory::find($id);
+        if (is_null($subcategory)) {
+            return response()->json(["message" => "subcategory not found"], 404);
+        }
+        return new SubcategoryResource($subcategory);
     }
 
     /**

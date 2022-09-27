@@ -55,7 +55,11 @@ class CategoryApiController extends Controller
      */
     public function show($id)
     {
-        return abort(404);
+        $category = Category::find($id);
+        if (is_null($category)) {
+            return response()->json(["message" => "item not found"], 404);
+        }
+        return new CategoryResource($category);
     }
 
     /**

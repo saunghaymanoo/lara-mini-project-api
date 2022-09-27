@@ -19,7 +19,7 @@ class ItemResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "code" => $this->code,
-            "subcategory" =>  $this->subcategory->title,
+            "subcategory" =>  new SubcategoryResource($this->subcategory),
             "owner" => $this::when($this->user() != null, $this->user->name),
             "description" => $this->description,
             "price" => $this->price,

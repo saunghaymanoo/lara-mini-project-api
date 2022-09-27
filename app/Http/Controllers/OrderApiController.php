@@ -17,12 +17,19 @@ class OrderApiController extends Controller
      */
     public function index()
     {
-        $orders = Order::get();
-        return response()->json([
-            "message" => "success",
-            "success" => true,
-            "orders" => $orders
-        ]);
+        $orders = Order::when(request('startDate'), function($q)
+        {
+            $start = strtotime(request('startDate'));
+            $startDate = date('Y-m-d',$start)." 00:00:00";
+            $end = strtotime(request('endDate'));
+            $endDate = date('Y-m-d',$end)." 23:59:59";
+          return  $q->whereBetween('created_at', [$startDate, $endDate]);
+        })
+            ->latest('id')
+            ->paginate(3)
+            ->withQueryString()
+            ->onEachSide(1);
+        return OrderResource::collection($orders);
     }
 
     /**

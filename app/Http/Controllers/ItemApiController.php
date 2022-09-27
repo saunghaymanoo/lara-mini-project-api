@@ -77,7 +77,7 @@ class ItemApiController extends Controller
             "description" => "nullable|min:10",
             "price" => "nullable|numeric",
             "discount" => "nullable|numeric",
-            "photo" => "nullable|mimes:jpeg,jpg,png|file|max:512"
+            "photo" => "nullable"
         ]);
         if($request->name){
             $item->name = $request->name;
@@ -97,12 +97,16 @@ class ItemApiController extends Controller
         if($request->discount){
             $item->discount = $request->discount;
         }
-        if($request->photo){
+        // return $item->photo;
+        if($request->file('photo')){
             Storage::delete("public/".$item->photo);
-            $newN = uniqid() . "-photo-" . $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->storeAs("public", $newN);
-            $item->photo = $newN;
+            $file= $request->file('photo');
+            $newN = uniqid() . "-photo-" . $file->getClientOriginalName();
+            $file->storeAs("public", $newN);
+        }else{
+            $newN = $item->photo;
         }
+        $item->photo = $newN;
         $item->update();
         return response()->json([
             "message" => "update successful",

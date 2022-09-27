@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryApiController;
 use App\Http\Controllers\ItemApiController;
 use App\Http\Controllers\OrderApiController;
 use App\Http\Controllers\SubcategoryApiController;
+use App\Http\Controllers\UserApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/categories', CategoryApiController::class);
     Route::apiResource('/subcategories', SubcategoryApiController::class);
     Route::apiResource('/orders', OrderApiController::class);
+    Route::apiResource('/users', UserApiController::class);
     Route::get('/orderbyauth', [OrderApiController::class, 'orderByAuth']);
     Route::post('/logout', [AuthApiController::class, 'logout']);
     Route::post('/logoutall', [AuthApiController::class, 'logoutAll']);
