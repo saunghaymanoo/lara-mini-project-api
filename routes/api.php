@@ -44,4 +44,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tokens', [AuthApiController::class, 'tokens']);
     // Route::get('/subcategorybycategory/{id}', [SubcategoryApiController::class, 'subcategoriesByCategory']);
     // Route::get('/itembysubcategory', [ItemApiController::class, 'itemsBySubcategory']);
+    Route::put('/changepassword/{id}', [UserApiController::class, 'changePassword']);
 });
