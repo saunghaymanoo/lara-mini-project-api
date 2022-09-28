@@ -24,7 +24,14 @@ class SubcategoryApiController extends Controller
             "subcategories" => SubcategoryResource::collection($subcategories)
         ]);
     }
-
+    public function subcategoriesByAuthor(){
+        $subcategories = Subcategory::when(Auth::user()->role === 'author', fn ($q) => $q->where('user_id', Auth::id()))->get();
+        return response()->json([
+            "message" => "success",
+            "success" => true,
+            "subcategories" => SubcategoryResource::collection($subcategories)
+        ]);
+    }
     /**
      * Store a newly created resource in storage.
      *

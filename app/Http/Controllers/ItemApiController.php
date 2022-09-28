@@ -20,6 +20,16 @@ class ItemApiController extends Controller
             ->onEachSide(1);
         return ItemResource::collection($items);
     }
+    public function itemsByAuthor()
+    {
+        $items = Item::when(request('keyword'), fn ($q) => $q->where('name', 'like', "%" . request('keyword') . "%"))
+            ->when(Auth::user()->role === 'author', fn ($q) => $q->where('user_id', Auth::id()))
+            ->latest('id')
+            ->paginate(3)
+            ->withQueryString()
+            ->onEachSide(1);
+        return ItemResource::collection($items);
+    }
     public function store(Request $request)
     {
         $request->validate([

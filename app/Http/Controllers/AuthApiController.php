@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,10 +35,11 @@ class AuthApiController extends Controller
         ]);
         if(Auth::attempt($request->only(['email','password']))){
             $token = Auth::user()->createToken('phone')->plainTextToken;
+            $user = User::find(Auth::id());
             return response()->json([
                 "success" => true,
                 "token" => $token,
-                "user" => Auth::user()
+                "user" => new UserResource($user) 
             ],200);
         }
         

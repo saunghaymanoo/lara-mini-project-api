@@ -24,7 +24,15 @@ class CategoryApiController extends Controller
             "categories" => CategoryResource::collection($categories)
         ],200);
     }
-
+    public function categoriesByAuthor()
+    {
+        $categories = Category::when(Auth::user()->role === 'author', fn ($q) => $q->where('user_id', Auth::id()))->get();
+        return response()->json([
+            "message" => "success",
+            "success" => true,
+            "categories" => CategoryResource::collection($categories)
+        ],200);
+    }
     /**
      * Store a newly created resource in storage.
      *
