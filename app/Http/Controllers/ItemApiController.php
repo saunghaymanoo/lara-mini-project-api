@@ -129,6 +129,8 @@ class ItemApiController extends Controller
         Gate::authorize('delete',$item);
         if (is_null($item)) {
             return response()->json(["message" => "item not found"], 404);
+        }else{
+            Storage::delete("public/".$item->photo);
         }
         $item->delete();
         return response()->json([
