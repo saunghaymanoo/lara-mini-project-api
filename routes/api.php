@@ -48,4 +48,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/itemsbyauthor', [ItemApiController::class, 'itemsByAuthor']);
     Route::get('/categoriesbyauthor',[CategoryApiController::class,'categoriesByAuthor']);
     Route::get('/subcategoriesbyauthor',[SubcategoryApiController::class,'subcategoriesByAuthor']);
+    Route::get('/barChart',[OrderApiController::class,'barChartArr']);
 });

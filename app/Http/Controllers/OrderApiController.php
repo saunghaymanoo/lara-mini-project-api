@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\OrderResource;
 use App\Models\Item;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderApiController extends Controller
 {
@@ -155,5 +157,31 @@ class OrderApiController extends Controller
             'success' => true,
             'orders' => OrderResource::collection($orders)
         ]);
+    }
+    public function barChartArr(){
+            $dateArr = [];
+            $dataArr = [];
+            // $date = date('Y-m-d');
+            for($i=1 ; $i<6 ; $i++){
+                //date array
+                $date = Carbon::now();
+                $newDate = $date->subDays($i);
+                array_unshift($dateArr, $newDate->format('Y-F-d'));
+                //data array
+                $dbDateArr =  Order::select(DB::raw('DATE_FORMAT(created_at, "%Y-%M-%d") as formatted_dob'))
+                                // ->where('home.job_started_date','!=','null')
+                                ->get();
+                $totalRent = 0;
+                foreach($dbDateArr as $r){
+                    if($newDate->format('Y-F-d') == $r->formatted_dob){
+                        $totalRent = $totalRent+1;
+                    }
+                }
+                array_unshift($dataArr,$totalRent);
+            }
+            return response()->json([
+                'dateArr' => $dateArr,
+                'dataArr' => $dataArr
+            ]);
     }
 }
